@@ -268,7 +268,7 @@
 
 (defparameter *array-dimensions*
     (loop
-        for i from 0 to 8 collect
+        for i from 0 below (min array-rank-limit 8) collect
           (loop for j from 1 to i collect 2)))
 
 (defparameter *default-array-target* (make-array '(300)))
