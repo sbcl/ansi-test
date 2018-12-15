@@ -134,6 +134,8 @@
                  program-error)
   t)
 
-
+(deftest make-string-output-stream.error.4
+    (signals-error (file-length (make-string-output-stream)) type-error)
+  T)
 
 
