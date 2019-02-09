@@ -77,11 +77,11 @@
 
 
 
-;;; If the parameter d is omitted, [...] a value is chosen for d in
+;;; "If the parameter d is omitted, [...] a value is chosen for d in
 ;;; such a way that as many digits as possible may be printed subject
 ;;; to [...] the constraint that no trailing zero digits may appear in
 ;;; the fraction, except that if the fraction to be printed is zero
-;;; then a single zero digit should appear after the decimal point.
+;;; then a single zero digit should appear after the decimal point."
 
 (deftest format.e.3
   (let ((fn (formatter "~6e")))
@@ -396,4 +396,41 @@
                      (formatter-call-to-string fn x))
           unless (and (string= s "5.00^-1") (string= s s2))
           collect (list x s s2)))
+  nil)
+
+
+;;; verify correct rounding
+
+(deftest format.e.26
+  (loop
+     for i = (random 4)
+     for type = (elt #(short-float single-float double-float long-float) i)
+     for min-value = (elt (vector least-positive-short-float least-positive-single-float
+                                  least-positive-double-float least-positive-long-float)
+                          i)
+     for max-value = (elt (vector most-positive-short-float most-positive-single-float
+                                  most-positive-double-float most-positive-long-float)
+                          i)
+     ;; create a random float ...
+     for x = (exp (+ (random (- (log max-value) (log min-value)))
+                     (log min-value)))
+     ;; ... and check the correct rounding for as many significant
+     ;; digits as the precision of the float allows
+     for incorrect-roundings =
+       (loop for d from 1 upto (floor (* (float-precision x)
+                                         (log (float-radix x) 10)))
+          for format-string = (format nil "~~,~d,,0e" d)
+          for s1 = (let* ((*read-default-float-format* type)
+                          (s1 (format nil format-string x)))
+                     (subseq s1 (1+ (position #\. s1)) (position #\e s1)))
+          with ret = nil
+          do (multiple-value-bind (s2 s3)
+                 (round-ratio-to-n-digits (rationalize x) d)
+               (unless (or (string= s1 s2)
+                           (and s3 (string= s1 s3)))
+                 (push (list x (format nil format-string x) s1 s2 s3) ret)))
+          finally (return ret))
+     repeat 20
+     if incorrect-roundings
+     collect incorrect-roundings)
   nil)

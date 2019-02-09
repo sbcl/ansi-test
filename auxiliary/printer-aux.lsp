@@ -449,3 +449,49 @@
     `(with-output-to-string
        (,stream)
        (assert (equal (funcall ,fn ,stream ,@args 'a) '(a))))))
+
+;;; Function used in checking correct rounding for floating point printing
+
+(defun round-ratio-to-n-digits (ratio n)
+  "Returns a string with the first n significant digits of the decimal
+representation of ratio."
+  (check-type ratio rational)
+  (check-type n (integer 1 *))
+  (let* ((exp (floor (* (- (integer-length (numerator ratio))
+                           (integer-length (denominator ratio)))
+                        #.(log 2d0 10))))
+         (10^n (expt 10 n))
+         ;; We first scale the ratio down to the range
+         ;; 10^n <= x < 10^(n+1). This allows us to use integer
+         ;; arithmetic to compute the number below satisfying
+         ;; below <= x <= below + 10.
+         (x (loop with x = (/ ratio (expt 10 (- exp n)))
+               until (<= 10^n x (* 10 10^n))
+               do (setf x (if (< x 10^n) (* x 10) (/ x 10)))
+               finally (return x)))
+         (below 10^n))
+    (loop for i below n
+       with 10^n-i = below
+       do (loop until (and (<= below x)
+                           (< x (+ below 10^n-i)))
+             do (if (> below x)
+                    (setf below (- below 10^n-i))
+                    (setf below (+ below 10^n-i))))
+         (setf 10^n-i (/ 10^n-i 10)))
+    (let ((halfway (+ below 5)))
+      (cond ((< x halfway)
+             (values (write-to-string (/ below 10))))
+            ((> x halfway)
+             (values (write-to-string (let ((rounded (+ (/ below 10) 1)))
+                                        (if (>= rounded 10^n)
+                                            (/ rounded 10)
+                                            rounded)))))
+            (t ;; "When rounding up and rounding down would
+             ;; produce printed values equidistant from the
+             ;; scaled value of arg, then the implementation is
+             ;; free to use either one"
+             (values (write-to-string (/ below 10))
+                     (write-to-string (let ((rounded (+ (/ below 10) 1)))
+                                        (if (>= rounded 10^n)
+                                            (/ rounded 10)
+                                            rounded)))))))))
