@@ -22,6 +22,7 @@
 
 ;;; 22.3.3
 (load "format/format-f.lsp")
+(load "format/format-e.lsp")
 
 ;;; 22.3.4
 (load "format/format-a.lsp")
