@@ -19,6 +19,9 @@
   "List containing pathname, creation times for files that have already
    been loaded.")
 
+(defun compile-and-load* (pathspec &key force)
+  (compile-and-load (merge-pathnames pathspec *aux-dir*) :force force))
+
 (defun compile-and-load (pathspec &key force)
   "Find the file indicated by PATHSPEC, compiling it first if
    the associated compiled file is out of date."

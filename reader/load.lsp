@@ -1,5 +1,5 @@
 ;;;; Tests of the reader
-(compile-and-load "ANSI-TESTS:AUX;reader-aux.lsp")
+(compile-and-load* "reader-aux.lsp")
 
 (in-package #:cl-test)
 

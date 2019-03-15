@@ -1,5 +1,5 @@
 ;;; Tests of types and classes
-(compile-and-load "ANSI-TESTS:AUX;types-aux.lsp")
+(compile-and-load* "types-aux.lsp")
 
 (in-package #:cl-test)
 

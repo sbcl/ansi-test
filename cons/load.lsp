@@ -1,5 +1,5 @@
 ;;; Tests of conses
-(compile-and-load "ANSI-TESTS:AUX;cons-aux.lsp")
+(compile-and-load* "cons-aux.lsp")
 
 (in-package #:cl-test)
 

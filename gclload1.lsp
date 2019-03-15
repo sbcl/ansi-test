@@ -23,12 +23,11 @@
 #+clisp (setq custom::*warn-on-floating-point-contagion* nil)
 
 ;;; Configure logical pathnames
-(setf (logical-pathname-translations "ANSI-TESTS")
-      `(("AUX;*.*.*"
-         ,(merge-pathnames "auxiliary/"
-                           (make-pathname
-                            :directory
-                            (pathname-directory *load-truename*))))))
+(defvar *aux-dir*
+  (merge-pathnames "auxiliary/"
+                   (make-pathname
+                    :directory
+                    (pathname-directory *load-truename*))))
 
 (let (*load-verbose* *load-print* *compile-verbose* *compile-print*)
   (load "compile-and-load.lsp"))
@@ -38,13 +37,13 @@
   (compile-and-load "rt.lsp")
   (load "cl-test-package.lsp")
   (in-package :cl-test)
-  (compile-and-load "ANSI-TESTS:AUX;ansi-aux-macros.lsp")
+  (compile-and-load* "ansi-aux-macros.lsp")
   (handler-bind
    #-sbcl ()
    #+sbcl ((sb-ext:code-deletion-note #'muffle-warning))
    (load "universe.lsp"))
-  (compile-and-load "ANSI-TESTS:AUX;random-aux.lsp")
-  (compile-and-load "ANSI-TESTS:AUX;ansi-aux.lsp")
+  (compile-and-load* "random-aux.lsp")
+  (compile-and-load* "ansi-aux.lsp")
   
   (load "cl-symbol-names.lsp")
   (load "notes.lsp"))

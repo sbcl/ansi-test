@@ -3,8 +3,8 @@
 ;;;; Created:  Sun Oct  6 00:32:56 2002
 ;;;; Contains: Loader for files containing package tests
 
-(compile-and-load "ANSI-TESTS:AUX;packages00-aux.lsp")
-(compile-and-load "ANSI-TESTS:AUX;package-aux.lsp")
+(compile-and-load* "packages00-aux.lsp")
+(compile-and-load* "package-aux.lsp")
 
 (in-package #:cl-test)
 

@@ -1,5 +1,5 @@
 ;;; Tests of strings
-(compile-and-load "ANSI-TESTS:AUX;string-aux.lsp")
+(compile-and-load* "string-aux.lsp")
 
 (in-package #:cl-test)
 

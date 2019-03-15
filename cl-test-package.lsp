@@ -8,7 +8,8 @@
   (unless pkg (setq pkg (make-package name :use '(:cl :regression-test))))
   (let ((*package* pkg))
     (shadow '(#:handler-case #:handler-bind))
-    (import '(common-lisp-user::compile-and-load)
+    (import '(common-lisp-user::compile-and-load
+              common-lisp-user::compile-and-load*)
             pkg)
     (export (mapcar #'intern
                     (mapcar #'symbol-name
