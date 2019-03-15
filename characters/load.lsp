@@ -1,5 +1,5 @@
 ;;;; Character tests
-(compile-and-load "ANSI-TESTS:AUX;char-aux.lsp")
+(compile-and-load* "char-aux.lsp")
 
 (in-package #:cl-test)
 

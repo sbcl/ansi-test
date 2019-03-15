@@ -5,7 +5,7 @@
 
 (defpackage :rctest
   (:use :cl :cl-test)
-  (:import-from "COMMON-LISP-USER" #:compile-and-load)
+  (:import-from "COMMON-LISP-USER" #:compile-and-load #:compile-and-load*)
   (:export
    #:generate
    ))

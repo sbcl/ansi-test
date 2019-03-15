@@ -1,7 +1,7 @@
 ;;; Tests of data and control flow
-(compile-and-load "ANSI-TESTS:AUX;cons-aux.lsp")
-(compile-and-load "ANSI-TESTS:AUX;random-aux.lsp")
-(compile-and-load "ANSI-TESTS:AUX;types-aux.lsp")
+(compile-and-load* "cons-aux.lsp")
+(compile-and-load* "random-aux.lsp")
+(compile-and-load* "types-aux.lsp")
 
 (in-package #:cl-test)
 

@@ -1,6 +1,6 @@
 ;;; Tests of conditions
-(compile-and-load "ANSI-TESTS:AUX;types-aux.lsp")
-(compile-and-load "ANSI-TESTS:AUX;define-condition-aux.lsp")
+(compile-and-load* "types-aux.lsp")
+(compile-and-load* "define-condition-aux.lsp")
 
 (in-package #:cl-test)
 

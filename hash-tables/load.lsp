@@ -1,4 +1,4 @@
-(compile-and-load "ANSI-TESTS:AUX;hash-table-aux.lsp")
+(compile-and-load* "hash-table-aux.lsp")
 
 (in-package #:cl-test)
 

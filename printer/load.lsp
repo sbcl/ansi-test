@@ -1,6 +1,6 @@
 ;;;; Tests of the lisp printer
-(compile-and-load "ANSI-TESTS:AUX;printer-aux.lsp")
-(compile-and-load "ANSI-TESTS:AUX;backquote-aux.lsp")
+(compile-and-load* "printer-aux.lsp")
+(compile-and-load* "backquote-aux.lsp")
 
 (in-package #:cl-test)
 

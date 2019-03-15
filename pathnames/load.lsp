@@ -1,5 +1,5 @@
 ;;;; Tests for pathnames and logical pathnames
-(compile-and-load "ANSI-TESTS:AUX;pathnames-aux.lsp")
+(compile-and-load* "pathnames-aux.lsp")
 
 (in-package #:cl-test)
 

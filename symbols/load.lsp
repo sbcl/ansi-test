@@ -1,5 +1,5 @@
 ;;; Tests of symbols
-(compile-and-load "ANSI-TESTS:AUX;cl-symbols-aux.lsp")
+(compile-and-load* "cl-symbols-aux.lsp")
 
 (in-package #:cl-test)
 
