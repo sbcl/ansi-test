@@ -114,3 +114,27 @@
   (signals-error (gensym "FOO" nil) program-error)
   t)
 
+;;;
+
+(deftest gensym.error.10
+    (signals-error
+     (let ((*gensym-counter* -1))
+       (gensym))
+     type-error)
+  t)
+
+(deftest gensym.error.11
+    (signals-error
+     (let ((*gensym-counter* (1- most-negative-fixnum)))
+       (gensym))
+     type-error)
+  t)
+
+(deftest gensym.error.12
+    (signals-error
+     (let ((*gensym-counter* 'defun))
+       (gensym))
+     type-error)
+  t)
+
+
