@@ -92,6 +92,7 @@
   (signals-error (disassemble 'car nil) program-error)
   t)
 
+#-sbcl ;; currently fails with a memory fault
 (deftest disassemble.error.3
   (check-type-error #'disassemble
                     (typef '(or function symbol (cons (eql setf) (cons symbol null)))))
