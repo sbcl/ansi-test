@@ -285,23 +285,15 @@ the condition to go uncaught if it cannot be classified."
 ;;; may be in more than one class/
 
 (defmacro signals-error (form error-name &key (safety 3) (name nil name-p) (inline nil))
-  `(handler-bind
-    ((warning #'(lambda (c) (declare (ignore c))
-                              (muffle-warning))))
-    (proclaim '(optimize (safety 3)))
-    (handler-case
-     (apply #'values
-            nil
-            (multiple-value-list
-             ,(cond
-               (inline form)
-               (regression-test::*compile-tests*
-                `(funcall (compile nil '(lambda ()
-                                          (declare (optimize (safety ,safety)))
-                                          ,form))))
-               (t `(eval ',form)))))
-     (,error-name (c)
-                  (cond
+  (let ((block (gensym "BLOCK")))
+   `(block ,block
+      (handler-bind
+          ((warning #'(lambda (c) (declare (ignore c))
+                        (muffle-warning)))
+           (,error-name
+             (lambda (c)
+               (return-from ,block
+                 (cond
                    ,@(case error-name
                        (type-error
                         `(((typep (type-error-datum c)
@@ -309,7 +301,7 @@ the condition to go uncaught if it cannot be classified."
                            (values
                             nil
                             (list (list 'typep (list 'quote
-                                                     (type-error-datum c))
+                                                     (type-of (type-error-datum c)))
                                         (list 'quote
                                               (type-error-expected-type c)))
                                   "==> true")))))
@@ -325,7 +317,7 @@ the condition to go uncaught if it cannot be classified."
                            (values
                             nil
                             (list 'stream-error-stream "==>"
-                                  (stream-error-stream c))))))
+                                  (type-of (stream-error-stream c)))))))
                        (file-error
                         `(((not (pathnamep (pathname (file-error-pathname c))))
                            (values
@@ -334,6 +326,16 @@ the condition to go uncaught if it cannot be classified."
                                   (file-error-pathname c))))))
                        (t nil))
                    (t (printable-p c)))))))
+        (apply #'values
+               nil
+               (multiple-value-list
+                ,(cond
+                   (inline form)
+                   (regression-test::*compile-tests*
+                    `(funcall (compile nil '(lambda ()
+                                             (declare (optimize (safety ,safety)))
+                                             ,form))))
+                   (t `(eval ',form)))))))))
 
 (defmacro signals-error-always (form error-name)
   `(values
