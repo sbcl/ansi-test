@@ -107,8 +107,8 @@
 (deftest file-position.9
   (with-input-from-string
    (s "abcdefghijklmnopqrstuvwxyz")
-   (loop repeat 26
-         for p = (file-position s)
+   (loop for p = (file-position s)
+         repeat 26
          unless (or (not p)
                     (progn
                       (file-position s p)
@@ -120,8 +120,8 @@
 (deftest file-position.10
   (with-output-to-string
    (s)
-   (loop repeat 26
-         for p = (file-position s)
+   (loop for p = (file-position s)
+         repeat 26
          unless (or (not p)
                     (progn
                       (file-position s p)
