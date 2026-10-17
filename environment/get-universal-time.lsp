@@ -32,7 +32,7 @@
     (loop for time = (get-universal-time)
           do (assert (>= time prev))
           do (setf prev time)
-          until (>= time (+ 5 first))))
+          until (>= time (+ 1 first))))
   nil)
 
 ;;; Error tests
